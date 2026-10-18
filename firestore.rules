@@ -1,0 +1,53 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidLead(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.username is string && data.username.size() <= 100 &&
+             data.fullName is string && data.fullName.size() <= 150 &&
+             data.linkType in ['linktree', 'wame', 'website', 'none', 'other'] &&
+             data.priority in ['high', 'medium', 'low'] &&
+             data.dayOfWeek in ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'pool'] &&
+             data.status in ['nao_abordado', 'abordado', 'follow_up', 'negociacao', 'vendido', 'perdido'] &&
+             data.saleValue is number && data.saleValue >= 0 &&
+             data.createdAt is string &&
+             data.updatedAt is string;
+    }
+
+    function isValidSetting(data) {
+      return data.targetPerDay is number && data.targetPerDay > 0 &&
+             data.defaultSalePrice is number && data.defaultSalePrice >= 0;
+    }
+
+    // Regra padrão de negação para segurança Zero-Trust
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Regras de validação estritas para coleção de leads
+    match /leads/{leadId} {
+      allow get, list: if true;
+      allow create: if isValidId(leadId) && isValidLead(incoming());
+      allow update: if isValidId(leadId) && isValidLead(incoming());
+      allow delete: if isValidId(leadId);
+    }
+
+    // Regras de validação para configurações do sistema
+    match /settings/{settingId} {
+      allow get, list: if true;
+      allow create: if isValidId(settingId) && isValidSetting(incoming());
+      allow update: if isValidId(settingId) && isValidSetting(incoming());
+      allow delete: if isValidId(settingId);
+    }
+  }
+}

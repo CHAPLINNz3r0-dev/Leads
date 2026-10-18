@@ -1,0 +1,142 @@
+{
+  "entities": {
+    "Lead": {
+      "title": "Lead",
+      "description": "Lead de prospecção do Instagram para venda de páginas web",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identificador único do lead"
+        },
+        "username": {
+          "type": "string",
+          "description": "Nome de usuário do Instagram (@)"
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Nome completo ou nome do negócio"
+        },
+        "bio": {
+          "type": "string",
+          "description": "Biografia extraída do perfil do Instagram"
+        },
+        "linkType": {
+          "type": "string",
+          "enum": ["linktree", "wame", "website", "none", "other"],
+          "description": "Classificação do link encontrado na bio"
+        },
+        "linkUrl": {
+          "type": "string",
+          "description": "URL visível na bio"
+        },
+        "category": {
+          "type": "string",
+          "description": "Nicho ou segmento de atuação"
+        },
+        "followersApprox": {
+          "type": "string",
+          "description": "Contagem aproximada de seguidores"
+        },
+        "prospectingAngle": {
+          "type": "string",
+          "description": "Gancho ou sugestão de abordagem comercial"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "Nível de prioridade"
+        },
+        "dayOfWeek": {
+          "type": "string",
+          "enum": ["segunda", "terca", "quarta", "quinta", "sexta", "sabado", "pool"],
+          "description": "Dia da semana alocado para prospecção"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["nao_abordado", "abordado", "follow_up", "negociacao", "vendido", "perdido"],
+          "description": "Etapa no funil de CRM"
+        },
+        "approachedAt": {
+          "type": "string",
+          "description": "Data e hora da primeira abordagem"
+        },
+        "followUpDueAt": {
+          "type": "string",
+          "description": "Data e hora limite para cobrança de follow-up"
+        },
+        "closedAt": {
+          "type": "string",
+          "description": "Data e hora do fechamento da venda"
+        },
+        "saleValue": {
+          "type": "number",
+          "description": "Valor monetário da venda realizada em R$"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Observações internas sobre a negociação"
+        },
+        "screenshotUrl": {
+          "type": "string",
+          "description": "Imagem ou print de perfil do lead"
+        },
+        "weekId": {
+          "type": "string",
+          "description": "Identificador da semana de prospecção"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp de criação do registro"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp da última atualização"
+        }
+      },
+      "required": ["id", "username", "fullName", "linkType", "priority", "dayOfWeek", "status", "saleValue", "createdAt", "updatedAt"]
+    },
+    "AppConfig": {
+      "title": "AppConfig",
+      "description": "Configurações gerais da aplicação e metas de prospecção",
+      "type": "object",
+      "properties": {
+        "targetPerDay": {
+          "type": "number",
+          "description": "Meta diária de novos leads abordados"
+        },
+        "defaultSalePrice": {
+          "type": "number",
+          "description": "Preço padrão de fechamento por página em R$"
+        },
+        "activeWeekId": {
+          "type": "string",
+          "description": "ID da semana atualmente em visualização"
+        },
+        "activeWeekOffset": {
+          "type": "number",
+          "description": "Deslocamento de semanas a partir da atual"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp da última atualização das configurações"
+        }
+      },
+      "required": ["targetPerDay", "defaultSalePrice"]
+    }
+  },
+  "firestore": {
+    "/leads/{leadId}": {
+      "schema": {
+        "$ref": "#/entities/Lead"
+      },
+      "description": "Coleção com todos os leads gerenciados pelo usuário"
+    },
+    "/settings/{settingId}": {
+      "schema": {
+        "$ref": "#/entities/AppConfig"
+      },
+      "description": "Documentos de configuração do aplicativo LeadRadar AI"
+    }
+  }
+}

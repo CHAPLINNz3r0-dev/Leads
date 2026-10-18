@@ -1,0 +1,6 @@
+{
+  "name": "LeadRadar AI - Gestor de Prospecção & Raio-X",
+  "description": "Organizador de leads e prospecção semanal no Instagram com Raio-X por IA via prints, planejamento inteligente de segunda a sexta, CRM integrado e agente copiloto.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
